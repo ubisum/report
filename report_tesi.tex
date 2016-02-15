@@ -1,0 +1,208 @@
+% document and page typologies
+\documentclass[a4paper, onecolumn]{report}
+
+% packages loading
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{mathptmx}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage[margin=1pt, font=small]{caption}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{amsbsy}
+\usepackage{bm}
+\usepackage{morefloats}
+\usepackage{lettrine}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{listing}
+\usepackage{enumerate}
+
+
+% text style
+\geometry{top=2cm, left=2cm, right=2cm, bottom=3cm}
+%\renewcommand*\thesubsection{\alph{subsection}}
+\titlespacing{\title}{0pt}{*5}{*0}
+\titlespacing{\section}{0pt}{*2}{*0}
+\titlespacing{\subsection}{0pt}{*1}{*0}
+\titlespacing{\subsubsection}{0pt}{*1}{*0}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{b}{n}
+\newcommand{\newln}{\right.  \notag \\ &\left.}
+\setlength{\intextsep}{10pt} % Vertical space above & below [h] floats
+\setlength{\textfloatsep}{1pt} % Vertical space below (above) [t] ([b]) floats
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+\font\largefont=yinitas
+%\renewcommand{\labelitemii}{$\bullet$}
+
+\begin{document}
+
+\chapter{Basic concepts}
+\section{Introduction}
+Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Robot sensors}
+Robots can be considered, among human artefacts, as the ones closest to the concept of a living being, with their capabilities to sense world and change their own choices on the basis of what they perceive in the surrounding environment. Without a sensing system, robots could be just able to repeat the same task and wouldn't be able to adapt their decisions to an environment continously changing around them. Thanks to sensors, robots can operate in places that are too dangerous for humans and interact with each other. 
+
+When designing a sensor, there is a small set of requirements that should be kept into account:
+\begin{itemize}
+\item{a good field of view, to satisfy the needings of the greatest number of applications}
+\item{a good minimum and maximum range of detection}
+\item{the largest accuracy and resolution}
+\item{a great ability to detect objects in the environment, dealing with phenomena such as reflection and noise due to ambient interference}
+\item{high update frequency, to have real time data at disposal as fast as possible}
+\item{generated data should be concise and easy to interpret}
+\item{low costs in designing, construction and maintenance}
+\item{low power consumption}
+\item{small size and weight}
+\end{itemize}
+
+\subsection{Range sensors}
+In many cases, a robot is required to build a map of its surrounding environment and for such goal a measurement of range between itself and obstacles is needed.
+There exists a class of range sensors widely used for such purpose based on the so called \emph{time of flight (TOF)} method; an ultrasonic, RF or optical source generates an energy wave that propagates into ambient and the distance between robot and an object is computed as the product of the velocity of wave and the time required to travel the round-trip distance, according to relation
+
+\begin{equation}
+	d = vt
+\end{equation}
+where $d$ is the round-trip distance, $v$ is the speed of propagation of energy wave and $t$ is the elapsed time. The time interval $t$ in previous equations is the one that elapses while the energy wave reaches the obstacle and gets back to robot; thus, to retrieve the real range between robot and target, $t$ must be divided by two.
+
+The signal emitted by robot reaches an object and walks back on the same way to the robot, where it will be detected by a receiver, that can be located close to emitter or integrated with emitter itself.
+As it is evident in ( ), the range to an object can be easily retrieved and no further knowledge about object's nature is necessary.
+
+Similarly to all kinds of sensors, even TOF systems are subject to measurements errors, which can be summarized in the following short list:
+\begin{itemize}
+\item{\bf{variations in the speed of propagation of emitted signal}}
+\item{\textbf{uncertainty in determining when reflected signal was detected}\\ 
+Such uncertainties depend on the fact that different surfaces reflect signal differently and this may cause time for detection of returned signal to rise. When a threshold on detection is established, more reflective objects are perceived as closer.}
+\item{\textbf{uncertanty in determining the exact round-trip time $t$}\\
+ It is due to problems correlated to inner timing circuitry.}
+\item{\textbf{interaction between originated signal and surfaces} \\
+When source signal hits a surface, only part of it is reflected and perceived by the robot. The remaining part is propagated into ambient or passes through the hit object. Thus, it may happen that no signal is received by robot, particularly if emitting angle exceed a certain threshold. The part of signal that is not sent back to robot, may be spread to envirnonment and perceived by another robot's sensors.}
+\end{itemize}
+
+\section{Odometry}
+Odometry is probably the most used method to estimate the position of a robot at any instant in time. The reasons of its success must be found in good accuracy, low cost and high sampling rates. Anyway, the way odometry computes robot's position (by integrating motion information across time) leads to errors; in particular, errors in estimating robot's orientation lead to large position errors, which grow proportionally with the distance afforded by robot. \\
+Despite limitations due to errors, odometry gained a great success in mobile robots field, for at the least four reasons:
+\begin{itemize}
+\item{other kinds of measurements can be itegrated to obtain a better accuracy}
+\item{in cases in whick landmarks are used for helping to estimate robot's position, their number can be smaller, thanks to odometry's presence}
+\item{odometry allows to assume that robot is stuck in a certain pose for enough time to perceive all the landmarks in a given area and compute possible matchings with landmarks detected previously}
+\item{in some circumstances, because of the absence of external references (e.g. landmarks) or the impossibility to place any of them in a hostile environment, odometry can be the only way to estimate robot's position}
+\end{itemize}
+Odometry exploits the measurements obtained from encoders mounted on robot's wheels to extimate its new pose. Let's suppose that, in a certain time interval, robot's wheels have pulses $N_L$ and $N_R$. Let's denote with $c_m$ the conversion factor that allows to convert pulses into a linear displacement. We can suppose that
+\begin{equation}
+	c_m = \frac{\pi D_n}{nC_e}
+\end{equation}
+where:
+\begin{itemize}
+\item{$D_m$ is the nominal wheel's diameter}
+\item{$C_e$ is the encoder resolution (pulses per revolution)}
+\item{$n$ is the reduction gear ratio between motor and drive wheel}
+\end{itemize}
+The incremental linear displacements $\Delta U_{L,i}$ and $\Delta U_{R,i}$ for the two wheels can be computed as:
+\begin{equation}
+	\begin{aligned}
+		\Delta U_{L,i} &= c_m N_L \\
+		\Delta U_{R,i} &= c_m N_R
+	\end{aligned}
+\end{equation}
+
+We can now compute the displacement for robot's centerpoint $\Delta U_i$ (that will be taken as a reference for robot's position) and change in orientation $\Delta \theta_i$:
+\begin{equation}
+	\begin{aligned}
+		\Delta U_i &= \frac{\Delta U_R + \Delta U_L}{2}  \\
+		\Delta \theta_i &= \frac{\Delta U_R - \Delta U_L}{b}
+	\end{aligned}				
+\end{equation}
+where $b$ is the distance between the two points where wheels touch the ground. 
+
+Thus, the new orientation of robot at time $i$ is:
+\begin{equation}
+	\theta_i = \theta_{i-1} + \Delta \theta_i
+\end{equation}
+The new position, at the same instant of time, of its centerpoint will be:
+\begin{equation}
+	\begin{aligned}
+		x_i &= x_{i-1} + \Delta U_i \cos \theta_i \\
+		y_i &= y_{i-1} + \Delta U_i \sin \theta_i
+	\end{aligned}
+\end{equation}
+
+\subsection{Systematic and Non-Systematic errors in odometry}
+As explained previously, the odometry exploits three simple equations to estimate current position of robot. All of them, are based on the assumption that any encoder's measurement can be translated into a linear diplacement. Anyway, such assumption may lose its validity in certain circumstances; for instance, if a wheel slips, its encoder will register a measurement that is converted in a linear displacement, even if robot didn't move actually. \\
+Slippage is only one of the possible causes of errors in odometry; they can me summarized and divided into the following two categories:\\ \\
+\textbf{Systematic errors}
+\begin{itemize}
+	\item{wheels with different diameters}
+	\item{wheelbase different from nominal one}
+	\item{wheels misalignment}
+	\item{finite encoder resolution}
+	\item{finite encoder sampling rate}
+\end{itemize} 
+\textbf{Non-Systematic errors}
+\begin{itemize}
+	\item{travelling on uneven floors}
+	\item{travelling over objects}
+	\item{slippage}
+\end{itemize}
+
+Both errors categories are very difficult to manage; the first ones, in fact, are constantly present and accumulate over time; the latter, are unpredictable and robot must be able to react promptly when they manifest.
+
+Across time, algorithms managing robot's position have thought it as surrounded by an error ellipse, denoting an area where robot may be in a certain moment. Ellipses grow with distance travelled, until an absolute measurement of position reduces ellipse's size. This method based on ellipses can be used to contain systematic errors only, since non systematic ones are unpredictable.
+
+Estimating correctly the extent of odometric errors avoids further problems such as a wrong calibration of mobile platforms. In 1995, Borenstein and Feng developed a method based on a model which considers two erros to be dominant:
+\begin{itemize}
+	\item{the error due to different wheels' diameters $E_d = \frac{D_R}{D_L}$, with $D_R$ and $D_L$, respectively, the actual diameters of right and left wheel}
+	\item{the error due to uncertainty about real wheelbase $E_b = \frac{b_{actual}}{b_{nominal}}$, with $b$ the wheelbase of robot}
+\end{itemize}
+
+\subsection{Measuring Systematic errors}
+Before describing Borenstein and Feng's method to estimate systematic errors, it is useful to analyse Borenstein and Koren's method (1987). \\
+Let's suppose that robot starts its path from an initial position <$x_0, y_0, \theta_0$> and has to move on a 4x4 meter square path. The robot is programmed to return to its initial position at the end of the path, but because of systematic errors, this will not happen accurately and a series of errors will be accumulated (\emph{return position errors}):
+\begin{equation}
+	\begin{aligned}
+		\epsilon_{x} &= x_{abs}-x_{calc} \\
+		\epsilon_{y} &= y_{abs}-y_{calc} \\
+		\epsilon_{\theta} &= \epsilon_{abs}-\epsilon_{calc}
+	\end{aligned}
+\end{equation}
+
+We have denoted with the $abs$ subscript the absolute position and orientation of the robot and with $calc$ subscript the position and orientation of robot according to odometry.
+
+This kind of experiment is not suitable for testing odometry for differential drive platforms. That is why Borenstein and Feng introduced their \emph{bidirectional square-path} experiment. This time, the robot is required to walk the path both in clockwise and counterclockwise direction. The errors $E_d$ and $E_b$ could compensate each other when robot travelled on one direction only; now, travelling on both direction, the two errors sum up.
+
+If we let the robot travel on both directions $n$ times (usually, $n=5$), at the end of each run robot will accumulare a pose error as explained in (). We can compute the center of gravity of these errors according to the following relations:
+\begin{equation}
+	\begin{aligned}
+		x_{cg}^{cw} &= \frac{1}{n}\sum^n_{i=1}\epsilon_{x,i}^{cw} \\
+		y_{cg}^{cw} &= \frac{1}{n}\sum^n_{i=1}\epsilon_{y,i}^{cw} \\
+		x_{cg}^{ccw} &= \frac{1}{n}\sum^n_{i=1}\epsilon_{x,i}^{ccw} \\
+		y_{cg}^{ccw} &= \frac{1}{n}\sum^n_{i=1}\epsilon_{y,i}^{ccw} 
+	\end{aligned}
+\end{equation}
+The two absolute offsets of centers of gravity from origin are:
+\begin{equation}
+	\begin{aligned}
+		r_{cg}^{cw} &= \sqrt{(x_{cg}^{cw})^2+(y_{cg}^{cw})^2} \\
+		r_{cg}^{cw} &= \sqrt{(x_{cg}^{ccw})^2+(y_{cg}^{ccw})^2}
+	\end{aligned}
+\end{equation}
+Finally, a measure of systematic odometric error can be obtained as
+\begin{equation}
+	E_{sys} = \max(r_{cg}^{cw},r_{cg}^{ccw}).
+\end{equation}
+The orientation error $\epsilon_\theta$ is not considered in $E_{sys}$, since each orientation error translates into a position error.
+
+\subsection{Measuring non-Systematic errors}
+The square path test that was used to estimate systematic error, can be implemented again for non-systematic case, adding to the path some artificial bumps. Since return errors are sensible to the positions of bumps, this time error $\epsilon_\theta$ will be used. We can, then, compute an \emph{average absolute orientation error}:
+\begin{equation}
+	\epsilon_{\theta, avg}^{nonsys} = \frac{1}{n}\sum_{i=1}^{n}|\epsilon_{\theta,i, cw}^{nonsys}-\epsilon_{\theta,i, cw}^{sys}| + \frac{1}{n}\sum_{i=1}^{n}|\epsilon_{\theta,i, ccw}^{nonsys}-\epsilon_{\theta,i, ccw}^{sys}|
+\end{equation}
+The use of absolute values in previous equations is needed to avoid that two return orientation errors with opposite signs compensate each other. Thus, if after first run we have $\epsilon_\theta=1^\circ$ and after second one we have $\epsilon_\theta = -1^\circ$, we will not erroneously derive that $\epsilon_{avg}^{nonsys}=0^\circ$.
+
+\end{document}
