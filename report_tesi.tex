@@ -82,7 +82,7 @@ Such uncertainties depend on the fact that different surfaces reflect signal dif
 \item{\textbf{uncertanty in determining the exact round-trip time $t$}\\
  It is due to problems correlated to inner timing circuitry.}
 \item{\textbf{interaction between originated signal and surfaces} \\
-When source signal hits a surface, only part of it is reflected and perceived by the robot. The remaining part is propagated into ambient or passes through the hit object. Thus, it may happen that no signal is received by robot, particularly if emitting angle exceed a certain threshold. The part of signal that is not sent back to robot, may be spread to envirnonment and perceived by another robot's sensors.}
+When source signal hits a surface, only part of it is reflected and perceived by the robot. The remaining part is propagated into ambient or passes through the hit object. Thus, it may happen that no signal is received by robot, particularly if emitting angle exceeds a certain threshold. The part of signal that is not sent back to robot, may be spread to envirnonment and perceived by another robot's sensors.}
 \end{itemize}
 
 \section{Odometry}
@@ -168,7 +168,7 @@ Let's suppose that robot starts its path from an initial position <$x_0, y_0, \t
 	\begin{aligned}
 		\epsilon_{x} &= x_{abs}-x_{calc} \\
 		\epsilon_{y} &= y_{abs}-y_{calc} \\
-		\epsilon_{\theta} &= \epsilon_{abs}-\epsilon_{calc}
+		\epsilon_{\theta} &= \theta_{abs}-\theta_{calc}
 	\end{aligned}
 \end{equation}
 
@@ -176,7 +176,7 @@ We have denoted with the $abs$ subscript the absolute position and orientation o
 
 This kind of experiment is not suitable for testing odometry for differential drive platforms. That is why Borenstein and Feng introduced their \emph{bidirectional square-path} experiment. This time, the robot is required to walk the path both in clockwise and counterclockwise direction. The errors $E_d$ and $E_b$ could compensate each other when robot travelled on one direction only; now, travelling on both direction, the two errors sum up.
 
-If we let the robot travel on both directions $n$ times (usually, $n=5$), at the end of each run robot will accumulare a pose error as explained in (). We can compute the center of gravity of these errors according to the following relations:
+If we let the robot travel on both directions $n$ times (usually, $n=5$), at the end of each run robot will accumulate a pose error as explained in (). We can compute the center of gravity of these errors according to the following relations:
 \begin{equation}
 	\begin{aligned}
 		x_{cg}^{cw} &= \frac{1}{n}\sum^n_{i=1}\epsilon_{x,i}^{cw} \\
@@ -205,4 +205,16 @@ The square path test that was used to estimate systematic error, can be implemen
 \end{equation}
 The use of absolute values in previous equations is needed to avoid that two return orientation errors with opposite signs compensate each other. Thus, if after first run we have $\epsilon_\theta=1^\circ$ and after second one we have $\epsilon_\theta = -1^\circ$, we will not erroneously derive that $\epsilon_{avg}^{nonsys}=0^\circ$.
 
+\section{Extracting features}
+In many different fields (machine learning and pattern recognition, just to mention a pair) the amount of data to manage (for example, the measurements returned by robot sensor) is too huge to be used in toto, so it becomes of great importance to extract only the necessary information, removing, moreover, all the redundancies that could make computation unfeasible. Thus, it is convenient to design processes that are able to extract information that is representative of data and allows to overcome the problem of using data in its totality. Such processes perform what is called \emph{features extraction}, i.e. they retrieve (and sometimes compute) elements (\emph{features}) that are distinctive of data, with which it is easier to operate; features are required to be informative, discriminative and indipendent. For some uses, features are even required to mantain some properties across space and time. \\
+Usually, features have a numerical nature, but sometimes they can present a different aspect (in some cases they can be strings of characters or histograms).
+
+Before designing an extraction process, features' structure needs to be planned, in order to respect the goal of good representation of data and to obtain elements with which working will be easy and effective.
+The choice about structure and computation of features depends on their final use and algorithms' purposes; here is a short list of common choices made in different fields:
+\begin{itemize}
+	\item{histograms of the distribution of black pixels in characters recognition}
+	\item{phonemes in speech recognition}
+	\item{repetitive words or text structures in spam detection, inside email inboxes}
+	\item{edges and corners in computer vision}
+\end{itemize}
 \end{document}

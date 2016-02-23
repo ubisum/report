@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  15 FEB 2016 18:36
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  23 FEB 2016 15:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -864,25 +864,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 137--140
 
  []
 
-[3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 208.
- [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 208.
+[3] [4]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 220.
+ [5]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 220.
  (./report_tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 208.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 208.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 220.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 220.
 Package rerunfilecheck Info: File `report_tesi.out' has not changed.
-(rerunfilecheck)             Checksum: 270B57A7E42313DEC07C1AF5773161CF;551.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 208.
+(rerunfilecheck)             Checksum: 566C9DAF32A16FC9272B6F7D89463C6E;616.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 220.
  ) 
 Here is how much of TeX's memory you used:
- 8952 strings out of 493633
- 131703 string characters out of 3143378
- 238813 words of memory out of 3000000
- 12052 multiletter control sequences out of 15000+200000
+ 8955 strings out of 493633
+ 131733 string characters out of 3143378
+ 240813 words of memory out of 3000000
+ 12053 multiletter control sequences out of 15000+200000
  45596 words of font info for 73 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 36i,8n,38p,542b,386s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,8n,38p,947b,392s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -893,10 +893,10 @@ f-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2011/texmf-dist/font
 s/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/ur
 w/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/ut
 mri8a.pfb>
-Output written on report_tesi.pdf (4 pages, 90509 bytes).
+Output written on report_tesi.pdf (5 pages, 92736 bytes).
 PDF statistics:
- 110 PDF objects out of 1000 (max. 8388607)
- 94 compressed objects within 1 object stream
- 24 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 120 PDF objects out of 1000 (max. 8388607)
+ 102 compressed objects within 2 object streams
+ 26 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
 
