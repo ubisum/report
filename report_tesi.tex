@@ -22,6 +22,8 @@
 \usepackage{hyperref}
 \usepackage{listing}
 \usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 
 
 % text style
@@ -44,7 +46,15 @@
 
 \chapter{Basic concepts}
 \section{Introduction}
-Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+This chapter introduces to the main concepts on which this thesis is based. 
+First of all, we will concentrate ourselves on describing the concept of sensors and their importance in self-perception of robots. Sensors, indeed, are very useful to allow a robot to localize itself and have an idea of surrounding environment; anyway, to make all this possible, it is necessary to design them in such a way to satisfy a series of requirements. Sensors, although their immense utility, furnish noisy measurements with which localization algorithms must deal.
+In this chapter, we will describe one particular kind of sensors, the ones based on the \emph{time of flight (TOF)} method.
+
+The main tecnique used by robots to estimate their current position and orientation is \emph{odometry}, which is based on data returned by robot's encoders. We will analyse the two types of errors it introduces and how they have been experimentally measured.
+
+Data furnished by sensors is often huge, so it is important to extract only relevant parts of it, in order to reduce time in computation. We will describe how such parts can be extracted and which properties we expect them to have.
+
+Finally, we will propose a process based on least squares minimization, that allows to estimate a robot's state (in terms of position and orientation), exploiting the error between measured and expected state value.
 
 \section{Robot sensors}
 Robots can be considered, among human artefacts, as the ones closest to the concept of a living being, with their capabilities to sense world and change their own choices on the basis of what they perceive in the surrounding environment. Without a sensing system, robots could be just able to repeat the same task and wouldn't be able to adapt their decisions to an environment continously changing around them. Thanks to sensors, robots can operate in places that are too dangerous for humans and interact with each other. 
@@ -206,7 +216,7 @@ The square path test that was used to estimate systematic error, can be implemen
 The use of absolute values in previous equations is needed to avoid that two return orientation errors with opposite signs compensate each other. Thus, if after first run we have $\epsilon_\theta=1^\circ$ and after second one we have $\epsilon_\theta = -1^\circ$, we will not erroneously derive that $\epsilon_{avg}^{nonsys}=0^\circ$.
 
 \section{Extracting features}
-In many different fields (machine learning and pattern recognition, just to mention a pair) the amount of data to manage (for example, the measurements returned by robot sensor) is too huge to be used in toto, so it becomes of great importance to extract only the necessary information, removing, moreover, all the redundancies that could make computation unfeasible. Thus, it is convenient to design processes that are able to extract information that is representative of data and allows to overcome the problem of using data in its totality. Such processes perform what is called \emph{features extraction}, i.e. they retrieve (and sometimes compute) elements (\emph{features}) that are distinctive of data, with which it is easier to operate; features are required to be informative, discriminative and indipendent. For some uses, features are even required to mantain some properties across space and time. \\
+In many different fields (machine learning and pattern recognition, just to mention a pair) the amount of data to manage (for example, the measurements returned by robot sensor) is too huge to be used in toto, so it becomes of great importance to extract only the necessary information, removing, moreover, all the redundancies that could make computation unfeasible. Thus., it is convenient to design processes that are able to extract information that is representative of data and allows to overcome the problem of using data in its totality. Such processes perform what is called \emph{features extraction}, i.e. they retrieve (and sometimes compute) elements (\emph{features}) that are distinctive of data, with which it is easier to operate; features are required to be informative, discriminative and indipendent. For some uses, features are even required to mantain some properties across space and time. \\
 Usually, features have a numerical nature, but sometimes they can present a different aspect (in some cases they can be strings of characters or histograms).
 
 Before designing an extraction process, features' structure needs to be planned, in order to respect the goal of good representation of data and to obtain elements with which working will be easy and effective.
@@ -217,4 +227,98 @@ The choice about structure and computation of features depends on their final us
 	\item{repetitive words or text structures in spam detection, inside email inboxes}
 	\item{edges and corners in computer vision}
 \end{itemize}
+
+As explained in previous section, data retrieved from odometry are often inaccurate and they can lead to errors in robot's position estimation; features, after their extraction from sensors' data, can add a precious information allowing to reduce the errors and gain a better estimate of robot position in time. Indeed, each feature carries information about its reciprocal position with respect to robot and it can be used to improve localization methods\\
+It is necessary to underline that even a well designed process of extraction can return a number of features that is too huge to be handled; so, it becomes crucial, in such cases, to be aware about which features are really necessary and which can be ignored. This mainly depends on the context in which robot operates, the perception system and the way features are represented.
+
+\subsection{Extracting lines as features}
+When receiving data from a ranger sensor (for instance, a laser range), one needs to operate with pairs $(\rho_i, \theta_i)$, which denote the position of i-th point in space, in polar coordinates, in robot's reference frame. Retrieving features from such information can be performed in two different ways:
+\begin{itemize}
+	\item{use a subset of points as features}
+	\item{extract lines from the sequence of points, representing the part of environment seen by sensor during last scan}
+\end{itemize}
+For the purpose of this thesis, we will consider the second option.
+
+Across the years, many algorithms have been developed for extracting lines, starting from a laser's sequence of points, each with its pros and cons. Here, we will describe the so-called \emph{split and merge algorithm}, which operates using a divide et impera logic, starting with an initial set of points, progressively divided into subsets (on the basis of a check condition), until satisfying the conditions for determining the existence of a line (the subset under inspection has not enough points to be divided into two subsets and/or no point satisfies check condition to proceed to another division).
+The main steps of procedure are described by Algorithm 1.
+\begin{algorithm}
+\caption{Split and merge algorithm}\label{euclid}
+\begin{algorithmic}[1]
+\item{Initial: put all points in a set $s_1$ and insert $s_1$ into an initially empty list $\mathcal{L}$}
+\item{Get a set $s_i$ from $\mathcal{L}$ and fit a line through its points}
+\item{Find point $P$ having the greatest distance $d_P$ from line}
+\item{If $d_P$ is less than a threshold, go back to step 2}
+\item{Otherwise, split $s_i$ in $P$ into two subsets $s_{i1}$ and $s_{i2}$. Replace $s_i$ with $s_{i1}$ and $s_{i2}$ in $\mathcal{L}$. Go back to step 2}
+\item{If all sets in $\mathcal{L}$ have been checked, merge collinear lines}
+\end{algorithmic}
+\end{algorithm}
+The second step of algorithm can be performed using any fitting process, even by connecting the first and last point in the sequence $s_i$. Each computed line is represented by its two extremes.
+
+\section{Least squares estimation}
+Let \textbf{x} be a vector variable indicating the state of the system and let's suppose to have a series of  functions 
+\begin{equation}
+	\{f_i(\textbf{x})\}_{i = 1:n} \notag
+\end{equation}
+which, given \textbf{x}, predict its measurement. \\Let's suppose, moreover, to have a series of real measurements ${\bf z_i}$. The goal is to extimate the state ${\bf x}$ that best fits the measurements ${\bf z_{i:n}}$.\\
+We can, then, determine an error between each real measurement and the relative predicted one:
+\begin{equation}
+	\textbf{e}_i = \textbf{z}_i - f_i(\textbf{x})
+\end{equation}
+This error is assumed to be zero mean and normally distributed with information matrix \textbf{$\Omega_i$}. \\
+If we compute the squared form of error, we notice that it is a scalar and depends only on the state of the system:
+\begin{equation}
+	e_i(\textbf{x}) = \textbf{e}_i(\textbf{x})^T\Omega_i\textbf{e}_i(\textbf{x})
+\end{equation}
+Then, the problem of finding the state that best fits the real measurements can be reduced to find the state ${\bf x^*}$ such that
+\begin{align}
+	\textbf{x*} &= \underset{\textbf{x}}{\mbox{argmin}} \enspace F(\textbf{x}) \\ \notag
+	&= \underset{\textbf{x}}{\mbox{argmin}} \sum_i e_i(\textbf{x}) \\ 
+	&= \underset{\textbf{x}}{\mbox{argmin}} \sum_i  \textbf{e}_i^T(\textbf{x})\Omega_i\textbf{e}_i(\textbf{x}) \notag
+\end{align}
+A general solution to the problem is to derive the global error function and find its nulls, but this would result in a complex solution which doesn't admit closed forms. So, proceeding with numerical approaches is a more practical path. 
+
+If a good initial guess is at disposal and the measurement functions are smooth in the neighborhood of minima, we can solve problem using iterative (local) linearizations. The iterative process is composed of three steps:
+\begin{itemize}
+	\item{linearize the problem around current initial guess}
+	\item{solve a linear system}
+	\item{compute a set of increments to be applied to current estimate in order to get closer to minima}
+\end{itemize}
+The first step is linearizing the problem and this can be done using a Taylor expansion:
+\begin{align}
+	\textbf{e}_i(\textbf{x} + \Delta\textbf{x}) &\simeq \textbf{e}_i(\textbf{x}) + \frac{\partial \textbf{e}_i}{\partial \textbf{x}}\Delta\textbf{x}\\
+	&= \textbf{e}_i + \textbf{J}_i\Delta\textbf{x} \notag
+\end{align}
+We can now place the Taylor expansion in the squared error:
+\begin{align}
+	&e_i(\textbf{x} + \Delta\textbf{x}) \simeq \notag \\
+	&\textbf{e}_i^T\Omega_i\textbf{e}_i + \textbf{e}_i^T\Omega_i\textbf{J}_i\Delta\textbf{x} + \Delta\textbf{x}^T\textbf{J}_i^T\Omega_i\textbf{e}_i + \Delta\textbf{x}^T\textbf{J}^T_i\Omega_i\textbf{J}_i\Delta\textbf{x} \notag \\
+	&= \underbrace{\textbf{e}_i\Omega_i\textbf{e}_i}_\text{$c_i$} + 2\underbrace{\textbf{e}_i^T\Omega_i\textbf{J}_i}_\text{$b_i^T$}\Delta\textbf{x} + \Delta\textbf{x}^T\underbrace{\textbf{J}_i^T\Omega_i\textbf{J}_i}_\text{$\textbf{H}_i$}\Delta\textbf{x} \notag \\
+	&= c_i + 2\textbf{b}_i^T\Delta\textbf{x} + \Delta\textbf{x}^T\textbf{H}_i\Delta\textbf{x}
+\end{align}
+The global error is the sum of the squared errors, so, from (3) and (5), we have:
+\begin{align}
+	F(\textbf{x} + \Delta\textbf{x}) &\simeq \sum_i(c_i + 2\textbf{b}_i^T\Delta\textbf{x} + \Delta\textbf{x}^T\textbf{H}_i\Delta\textbf{x}) \notag \\
+	&= \sum_i c_i + 2(\sum_i\textbf{b}_i^T)\Delta\textbf{x} + \Delta\textbf{x}^T(\sum_i\textbf{H}_i)\Delta\textbf{x}
+\end{align}
+where
+\begin{align}
+	\textbf{b}^T &= \sum_i\textbf{e}_i^T\Omega_i\textbf{J}_i  \\
+	\textbf{H} &= \sum_i\textbf{J}_i^T\Omega_i\textbf{J}_i 
+\end{align}
+The expression of global error we have just obtained is quadratic in $\Delta\textbf{x}$ and can be minimized; for this purpose, we can compute its derivative with repect to $\Delta\textbf{x}$ in the neighborhood of current solution $\textbf{x}$:
+\begin{equation}
+\frac{\partial F(\textbf{x}+\Delta\textbf{x})}{\partial\Delta\textbf{x}} \simeq 2\textbf{b} + 2\textbf{H}\Delta\textbf{x}
+\end{equation}
+with the optimal solution reached for 
+\begin{equation}
+\Delta\textbf{x*} = -\textbf{H}^{-1}\textbf{b}
+\end{equation}
+Thus, an iterative algorithm can be designed; it will execute the following steps:
+\begin{itemize}
+	\item{linearize the system around current guess $\textbf{x}$ and compute $\textbf{e}_i(\textbf{x} + \Delta\textbf{x})$ as described in () and ()}
+	\item{compute $\textbf{b}^T$ and $\textbf{H}$ as described in () and ()}
+	\item{solve the system to get a new optimal increment $\Delta\textbf{x*}$, as indicated in ()}
+	\item{update the previous estimate: $\textbf{x} \leftarrow \textbf{x} + \Delta\textbf{x*}$}
+\end{itemize}
+
 \end{document}
