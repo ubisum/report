@@ -44,6 +44,64 @@
 
 \begin{document}
 
+\chapter{Related work}
+\section{Introduction}
+Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Related work in scan matching}
+Given two sets of 2D data, the \emph{scan matching} problem consists in finding a traslation $T$ and a rotation $R_\phi$ that maximize the overlapping between the two sets. The scan matching algorithms usually work using data furnished by 2D range sensors and differ in their behaviour depending on the availability of an initial guess of solution. \\
+A further classification of scan matching algorithms can be made on the basis of their assumption about the presence of noise in sensor's measurements and of features in surrounding environment. Feature-based algorithms, in particular, gained a great success because of their computational effectiveness, but it must be underlined that the extraction of features may produce a loss of information. 
+
+When ambient contains features that are invariant to rotation and traslation, they can be easily extracted from scans and can be used to find a solution in a linear time. \\
+If the extraction of features is not simple because of the structure of environment, then it is possible to use algorithms belonging to ICP family, which base their operation on a two step procedure:
+\begin{itemize}
+	\item{find an initial heuristic set of correspondences between points in two scans}
+	\item{find a roto-traslation that more or less satisfies the set of correspondences}
+\end{itemize}
+The two steps are repeated until the error falls below a certain threshold. The convergence is possible if scan are produced in two robot's positions that are close to each other.
+
+\subsection{Scan matching using the Hough transform}
+In a 2009 article by Censi, Iocchi and Grisetti, the problem of scam matching is afforded by the use of \emph{Hough transform (HT)} and is, then, moved to the Hough domain. If we have an \emph{input space} $\mathcal{S}$, the HT maps an input $i(\bf{s})$ (with $\bf{s} \in \mathcal{S}$) to an output function $\mbox{HT}\{i\}(\bf{p})$, with $\bf{p}$ belonging to a \emph{parameter space} $\mathcal{P}$. \\
+We can define the HT of input $i(\bf{s})$ as
+\begin{equation}
+	\mbox{HT}[\mathcal{F}, i](\bf{p}) = \int_{\mathcal{F}_{\bf{p}}} \emph{i}(\bf{s}) \emph{d}\bf{s}
+\end{equation}
+A possible choice for $\mathcal{P}$ is the the set of representations of lines in $\mathbb{R}^2$. If we recall the polar representation of lines 
+\begin{equation}
+	x\cos\theta + y\sin\theta = \rho
+\end{equation}
+in which $\theta$ expresses the direction of line's normal vectors and $\rho$ its distance from origin, we can select a family of sets to apply HT:
+\begin{equation}
+	\mathcal{F}_{(\theta, \rho)} =\{(x,y) | x\cos\theta + \sin\theta = \rho\}
+\end{equation}
+On the other side, the input space is composed by points $P = \{p_j\}$, as they are returned by a range sensor. So we have that
+\begin{equation}
+	\bf{s} := \emph{(x,y)} \in \mathcal{S} := \mathbb{R}^\emph{2}
+\end{equation}
+and
+\begin{equation}
+	i(\bf{s}) = \sum_{\emph{j}} \delta(\bf{s} - \bf{p_j})
+\end{equation}
+where $\delta$ is Dirac's impulse distribution.
+
+HT has two fundamental properties:
+\begin{itemize}
+	\item{\mbox{HT}$(\theta, \rho)$ is 2$\pi$-periodic}
+	\item{the two points $(\theta, \rho)$ and $(\theta+\pi, -\rho)$ in $\mathcal{P}$ represent the same line in $\mathbb{R}^2$}
+\end{itemize}
+Let's suppose that $\emph{i}(\bf{s})$ and $\emph{i'}(\bf{s})$ are two inputs, such that
+\begin{equation}
+	\emph{i'}(\bf{s}) = \emph{i}(\emph{R}_\phi \cdot \bf{s} + \emph{T})
+\end{equation}
+Then, within parameter space $\mathcal{P}$:
+\begin{equation}
+	\mbox{HT}'(\rho, \theta) = \mbox{HT}(\theta+\phi, \rho+(\cos\theta \quad \sin\theta)T)
+\end{equation}
+Computing the HT passes through a discrete approximation of it, called \emph{Discrete Hough Transform (DHT)}, that allows to redefine our family of sets as:
+\begin{equation}
+	\mathcal{D}_{(\theta, \rho)} = \{(x,y) | \ \rho\le x\cos\theta + y\sin\theta < \rho + \Delta\rho\} 
+\end{equation}
+%--------------------------------------------------------------------------
 \chapter{Basic concepts}
 \section{Introduction}
 This chapter introduces to the main concepts on which this thesis is based. 
