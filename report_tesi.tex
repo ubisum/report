@@ -47,7 +47,11 @@
 
 \chapter{Related work}
 \section{Introduction}
-Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Self localization of robot inside a unknow environment passes through the extraction of relevant patterns from data acquired by sensors on-board. Such patterns, usually called \emph{features}, must be chosen carefully and tested, in order to realize whether their are suitable for the task to be accomplished. \\
+In this chapter, we will describe a procedure to estimate how much a certain features is useful, by exploiting the concept of \emph{dissimilarity}, i.e. a measure of how much a sensor's perception (an image taken by a camera, for instance) changes with respect to a reference one.
+
+The same importance must be given to the way we choose to represent a feature, in order to be able to individuate it when it figures out in different scans of robot. In this thesis, we decided to use lines as features; we will describe, then, in the beginning of this chapter, how the polar representation of a line was exploited in Hough domain, to individuate an algorithm able to solve the so called \emph{scan matching} problem. \\ 
+We will introduce, moreover, an other procedure that takes advantage of the geometric structure of environment and updates a list of plausible matches between lines in different scans. The output of procedure is melted with data from odometry, in order to update current robot's pose, through the use of Kalman filters.
 
 \section{Related work in scan matching}
 Given two sets of 2D data, the \emph{scan matching} problem consists in finding a traslation $T$ and a rotation $R_\phi$ that maximize the overlapping between the two sets. The scan matching algorithms usually work using data furnished by 2D range sensors and differ in their behaviour depending on the availability of an initial guess of solution. \\
@@ -59,7 +63,7 @@ If the extraction of features is not simple because of the structure of environm
 	\item{find an initial heuristic set of correspondences between points in two scans}
 	\item{find a roto-traslation that more or less satisfies the set of correspondences}
 \end{itemize}
-The two steps are repeated until the error falls below a certain threshold. The convergence is possible if scan are produced in two robot's positions that are close to each other.
+The two steps are repeated until the error falls below a certain threshold. The convergence is possible if scans are produced in two robot's positions that are close to each other.
 
 \subsection{Scan matching using the Hough transform}
 In a 2009 article by Censi, Iocchi and Grisetti, the problem of scan matching is afforded by the use of \emph{Hough transform (HT)} and is, then, moved to the Hough domain. If we have an \emph{input space} $\mathcal{S}$, the HT maps an input $i(\bf{s})$ (with $\bf{s} \in \mathcal{S}$) to an output function $\mbox{HT}\{i\}(\bf{p})$, with $\bf{p}$ belonging to a \emph{parameter space} $\mathcal{P}$. \\
@@ -203,7 +207,7 @@ Once the matching activities are completed, the most plausible position is selec
 
 \section{Selecting features to track}
 A scan matching algorithm, whatever its inner functionalities, can work properly only if the choice of features to extract has been made correctly, in order to maximize matching result. \\
-Shi and Tomasi, introduced in 1994, a method for features extraction based on the concept of \emph{dissimilarity}, a measure of changes occurred to features between first frame and current one. When dissimilarity is too high, features should be ignored. 
+Shi and Tomasi introduced, in 1994, a method for features selection based on the concept of \emph{dissimilarity}, a measure of changes occurred to features between first frame and current one. When dissimilarity is too high, features should be ignored. 
 
 Considering frames acquired by a moving camera, all patterns that can be extracted vary in terms of intensity. Such changes are included in the definition of \emph{motion}:
 \begin{equation}
@@ -220,7 +224,7 @@ with
 	D = \left(\begin{matrix}d_{xx} & d_{xy} \\ d_{yx} & d_{yy}\end{matrix}\right)
 \end{equation}
 a deformation matrix; $\boldsymbol{d}$ is the traslation of a feature window's center. \\ 
-By measuring the coordinates $\boldsymbol{x}$ with respect to the center of window, we get that a point $\boldsymbol{x}$ in the first image $I$ moves to a point $A\boldsymbol{x} + d$ in second image $J$, with $A=\boldsymbol{1} + \emph{D}$ and $\boldsymbol{1}$ is a $2 \times 2$ identity matrix. \\
+By measuring the coordinates $\boldsymbol{x}$ with respect to the center of window, we get that a point $\boldsymbol{x}$ in the first image $I$ moves to a point $A\boldsymbol{x} + d$ in second image $J$, with $A=\boldsymbol{1} + \emph{D}$ and $\boldsymbol{1}$ a $2 \times 2$ identity matrix. \\
 Thus, the tracking problem between two images $I$ and $J$ can be formulated in terms of finding the six parameters contained in $D$ and $\boldsymbol{d}$. A model that uses small windows is preferable, since it causes less problems in terms of deph discontinuity; in such condition, the matrix $D$, that is harder to estimate because of the small variation of motion, can be assumed equal to zero, so
 \begin{equation}
 	\delta = \boldsymbol{d}. \notag
