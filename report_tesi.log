@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  10 MAR 2016 11:30
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  9 APR 2016 18:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -904,7 +904,7 @@ on.1.3.23}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.254 \end{equation}
+l.242 \end{equation}
                     ] [5pdfTeX warning (ext4): destination with the same identi
 fier (name{equation.1.3.26}) has been already used, duplicate ignored
 
@@ -925,32 +925,35 @@ me{equation.2.5.12}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.557 	\item{
-             update the previous estimate: $\textbf{x} \leftarrow \textbf{x}...
-]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 560.
- [12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 560.
+l.553 \end{equation}
+                    ] [12]
+Chapter 3.
+[13
+
+] [14]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 666.
+ [15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 666.
  (./report_tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 560.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 560.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 666.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 666.
 Package rerunfilecheck Info: File `report_tesi.out' has not changed.
-(rerunfilecheck)             Checksum: E43A43EFF4BBF769EE9996AB7EDA77AC;1212.
+(rerunfilecheck)             Checksum: 3C82F1AD9204AAC5FC47552264689355;1567.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.55997pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 560.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 666.
  ) 
 Here is how much of TeX's memory you used:
- 9685 strings out of 493633
- 142218 string characters out of 3143378
+ 9716 strings out of 493633
+ 142616 string characters out of 3143378
  256802 words of memory out of 3000000
- 12696 multiletter control sequences out of 15000+200000
- 84728 words of font info for 124 fonts, out of 3000000 for 9000
+ 12701 multiletter control sequences out of 15000+200000
+ 85028 words of font info for 125 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 36i,17n,38p,948b,393s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,17n,38p,1024b,393s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/loc
@@ -964,10 +967,10 @@ l/texlive/2011/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2
 ist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/
 type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on report_tesi.pdf (12 pages, 150520 bytes).
+Output written on report_tesi.pdf (15 pages, 165256 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
- 218 compressed objects within 3 object streams
- 81 named destinations out of 1000 (max. 500000)
- 137 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 301 PDF objects out of 1000 (max. 8388607)
+ 269 compressed objects within 3 object streams
+ 106 named destinations out of 1000 (max. 500000)
+ 177 words of extra memory for PDF output out of 10000 (max. 10000000)
 

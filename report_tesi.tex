@@ -31,7 +31,7 @@
 \geometry{top=2cm, left=2cm, right=2cm, bottom=3cm}
 %\renewcommand*\thesubsection{\alph{subsection}}
 \titlespacing{\title}{0pt}{*5}{*0}
-\titlespacing{\section}{0pt}{*2}{*0}
+\titlespacing{\section}{0pt}{*4}{*0}
 \titlespacing{\subsection}{0pt}{*1}{*0}
 \titlespacing{\subsubsection}{0pt}{*1}{*0}
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{b}{n}
@@ -468,6 +468,7 @@ As explained in previous section, data retrieved from odometry are often inaccur
 It is necessary to underline that even a well designed process of extraction can return a number of features that is too huge to be handled; so, it becomes crucial, in such cases, to be aware about which features are really necessary and which can be ignored. This mainly depends on the context in which robot operates, the perception system and the way features are represented.
 
 \subsection{Extracting lines as features}
+On deciding which features need to be extracted, geometric primitives are always a good solution to the problem; in particular, lines are the simplest choice, since most environments can be described using line segments.
 When receiving data from a ranger sensor (for instance, a laser range), one needs to operate with pairs $(\rho_i, \theta_i)$, which denote the position of i-th point in space, in polar coordinates, in robot's reference frame. Retrieving features from such information can be performed in two different ways:
 \begin{itemize}
 	\item{use a subset of points as features}
@@ -475,7 +476,8 @@ When receiving data from a ranger sensor (for instance, a laser range), one need
 \end{itemize}
 For the purpose of this thesis, we will consider the second option.
 
-Across the years, many algorithms have been developed for extracting lines, starting from a laser's sequence of points, each with its pros and cons. Here, we will describe the so-called \emph{split and merge algorithm}, which operates using a divide et impera logic, starting with an initial set of points, progressively divided into subsets (on the basis of a check condition), until satisfying the conditions for determining the existence of a line (the subset under inspection has not enough points to be divided into two subsets and/or no point satisfies check condition to proceed to another division).
+Across the years, many algorithms have been developed for extracting lines, starting from a laser's sequence of points, each with its pros and cons. The choice of an algorithm instead of another one depends mainly on one's needs. Sometimes speed needs to be preferred, in some other cases it is preferrable to give importance to quality, since bad extraction of features may lead to system's divergence. Complexity, too, is a particular not to be forgotten. \\ 
+Here, we will describe the so-called \emph{split and merge algorithm}, which operates using a divide et impera logic, starting with an initial set of points, progressively divided into subsets (on the basis of a check condition), until satisfying the conditions for determining the existence of a line (the subset under inspection has not enough points to be divided into two subsets and/or no point satisfies check condition to proceed to another division).
 The main steps of procedure are described by Algorithm 1.
 \begin{algorithm}
 \caption{Split and merge algorithm}\label{euclid}
@@ -557,4 +559,108 @@ Thus, an iterative algorithm can be designed; it will execute the following step
 	\item{update the previous estimate: $\textbf{x} \leftarrow \textbf{x} + \Delta\textbf{x*}$}
 \end{itemize}
 
+% -------------------------------------------------------------------------------
+
+\chapter{ Fast Position Tracking: overall approach}
+
+\section{Introduction}
+Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Landmarks and features}
+As discussed in last chapters, once a robot has acquired information from a sensor (a laser scan, for instance), it is necessary to extract only the relevant part of data, in order to reduce complexity without affecting performances. Such relevant part is formed by \emph{features}, elements that describe reliably the part of enrironment perceived by a sensor's acquirement. They may represent physical objects and in robotics are often called \emph{landmarks}, to underline the fact that they are exploited by robot during navigation. Without losing generality, we can assume that robot is always able to measure the bearing and range of landmarks in its own reference frame. Sometimes, an extractor adds a \emph{signature} to measurements, in terms of a numerical value that can represent, for instance, an average color. The presence of signature is not strictly required and all what will be exposed in the following can be reduced to the case in which no signature has been introduced.
+
+If we denote with $f$ an extractor function, the extracted features can be represented as $f(z_t)$; let's indicate with $r$, $\phi$ and $s$ the range, the bearing and the signature. We can obtain, then, a feature vector as a collection of triplets:
+\begin{equation}
+	f(z_t) = \{f_t^1, f_t^2, \dots \} =\left \{ \left( \begin{matrix} r_t^1 \\ \phi_1^t \\ s_t^1 \end{matrix} \right),  \left(\begin{matrix} r_t^2 \\ \phi_2^t \\ s_t^2 \end{matrix} \right), \dots \right\}
+\end{equation}
+It is commonly accepted that features are indipendent from each other; such indipendence can be formalized as
+\begin{equation}
+	p(f(z_t) \: | \: x_t, m) = \prod_i p(r_t^i, \phi_t^i, s_t^i \: | \: x_t, m)
+\end{equation}
+where $m$ is the map computed up to time instant $t$ and $x_t$ is current robot's state. \\
+Actually, indipendence between features can be guaranteed only if the noise on a measurement $(r_t^i, \phi_t^i, s_t^i)$ is indipendent from the noise on another measurement $(r_t^j, \phi_t^j, s_t^j)$; when indipendence can be assumed, each feature can be processed separately and it is possible to design more efficient algorithms to implement probabilistic measurement models. 
+
+For feature-based algorithms, the map $m$ is composed by a collection of features $m = \{m_1, m_2, \dots \}$. To each feature on the map corresponds a \emph{location coordinate}, whose components can be denoted by $(m_{i,x} \quad m_{i,y})$. Assuming that, at time $t$, the $i$-th feature corrsponds the $j$-th landmark and that robot's state, at the same instant, is described by $x_t = (x \quad y \quad \theta)$, we can model noise on measurement:
+\begin{equation}
+	\left(\begin{matrix} r_t^i \\ \phi_t^i \\ s_t^i	\end{matrix} \right) = \left( \begin{matrix} \sqrt{(m_{j,x} - x)^2 + (m_{j,y} - y)^2} \\ \mbox{atan2}(m_{j,y} - y, m_{j,x}-x) - \theta \\ s_j\end{matrix}\right) + \left( \begin{matrix}\epsilon_{\sigma_r^2} \\ \epsilon_{\sigma_{\phi}^2} \\ \epsilon_{\sigma_s^2}\end{matrix}\right)
+\end{equation}
+where $\epsilon_{\sigma_r^2}$, $\epsilon_{\sigma_\phi^2}$ and $\epsilon_{\sigma_s^2}$ are zero-mean Gaussian error variables with variances $\sigma_r^2$, $\sigma_\phi^2$ and $\sigma_s^2$, respectively.
+
+\subsection{Extraction and model of features}
+When working with 2D landmarks, line segments represent a good choice for determining a reliable set of features, since they are simple geometric primitives but, at the same time, furnish a good amount of information to be used during localization phases. The easiest way to represent a segment is by its endpoints; in some circumstances (for instance, the cases in which a robot scans an environment in which different corridors share a wall), the endpoints' information may be misleading, but the distance that can be measured between them is, at the least, a lower bound on the actual length of the segment they delimit.
+
+Given a scan from laser, the \emph{Split and merge} algorithm described in Section 2.4.1 can be used to extract segments, which can be characterized by their endpoints. When segments appear to be collinear and their extremes are close enough, they can be melted or joined, obtaining what is known as a \emph{polyline structure}. Segments that could not be joined and whose length falls below a determined threshold, can be deleted, since they represent a useless source of noise. It is, moreover, possible to gain a polar representation of segments, using the aforementioned equation $x\cos \theta + y\sin\theta = \rho$, where $\rho$ is the distance of line from the origin and $\theta$ is its orientation, in terms of its slope with respect to $x$ axis. Both quantities are expressed in robot's reference frame.
+
+\section{Matching features}
+If we consider two scans $i$ and $j$ returned by robot's laser, according to previous section, we are able to extract lines from each of them, elaborate them and obtain a polyline structure formed by extracted segments. \\
+What becomes of great interest at this moment is discovering whether one or more lines in scan $i$ correspond to lines extracted from scan $j$. This is what is known as the \emph{matching problem}. \\
+Finding out the associations between lines belonging to different scans allows to compute a rigid transformation $T$ from scan $j$ to scan $i$; such transformation, is actually able to translate the reference frame of robot in which $j$ was acquired onto reference frame in which $i$ was expressed. The sought transformation should be able to maximize the overlapping between the two reference frames, minimizing, at the same time, the value of an opportune error function.
+
+The problem of determining $T$ can be formulated in terms of a least square estimation, by exploiting the concepts in Section 2.5. Let's suppose that a generic segment $l$ in scan $i$ can be expressed as 
+\begin{equation}
+	l_i = \left(\begin{matrix} p_i \\ n_i \end{matrix} \right)
+\end{equation}
+where $p$ is a point on segment (middlepoint is the most convenient choice) and $n$ is segment's normal, in its classical expression
+\begin{equation}
+	n = (\cos\theta_i \quad \sin\theta_i)^T.
+\end{equation}
+The needed transformation T will always have the form
+\begin{equation}
+	T = \left(\begin{matrix} R && \bf{t} \\ \bf{0} && 1 \end{matrix}\right)
+\end{equation}
+where $R$ is a $2\times2$ rotation matrix, \textbf{t} is traslation vector and \textbf{0} is a $1\times2$ zero vector. We can assume an initial value for $T$: in particular, $T$ can assume the value of an initial guess or can be simply set to a $3\times3$ identity matrix. The transformation embodied by initial $T$ can be applied to $l_i$, obtaining a new line $l'$:
+\begin{equation}
+	l' = Tl_i = \left(\begin{matrix}Rp_i+t \\ Rn_i\end{matrix}\right)
+\end{equation}
+As it is evident from previous expression, to the generic point on segment a roto-traslation is applied, while only a rotation is applied to segment's normal. Supposing that new segment $l'$ should be matched, after applying transformation, with a line $l_j = (p_j \quad n_j)^T$ in scan $j$, we can define an error function
+\begin{equation}
+	e_{ij}(T) = \left(\begin{matrix}Rp_i + \textbf{t} - p_j \\ Rn_i - n_j \end{matrix}\right)
+\end{equation}
+A perturbation $\Delta T$ can be introduced to the error function, determining a new function
+\begin{equation}
+	e_{ij}(T \oplus \Delta T) = \left(\begin{matrix} \Delta R(Rp_i + \textbf{t}) + \Delta T - p_j \\ \Delta R \cdot Rn_i - n_j \end{matrix}\right)
+\end{equation}
+Deriving previous expression, we get:
+\begin{equation}
+	\frac{\partial e_{ij}(\Delta T \oplus T)}{\partial \Delta T} = \left(\begin{matrix} \textbf{I}_{2 \times 2} \\ \\ \textbf{0}_{2 \times 2} \end{matrix} \quad \begin{matrix} -p_{iy} \\ p_{ix} \\ -n_{iy} \\ n_{ix}\end{matrix}\right),
+\end{equation}
+where subscripts $ix$ and $iy$ indicate the components $x$ and $y$ in $p_i$ and $n_i$.
+
+If we were able to rotate a single segment, in such a way its normal is parallel to $x$ axis, we could obtain the useful result of having the segment's variance only moving along $x$. This result can be achieved by defining a covariance matrix as
+\begin{equation}
+	\Omega_{ij} = \left(\begin{matrix} \Omega_{p_i} && \textbf{0}_{2\times2} \\ \textbf{0}_{2\times2} && \alpha \textbf{I}_{2\times2} \end{matrix}\right)
+\end{equation}
+with
+\begin{equation} \Omega_{p_i} = R_i\left(\begin{matrix} 1 && 0 \\ 0 && \epsilon \end{matrix}\right)R_i\end{equation}
+and
+\begin{equation}
+	R_i = \left(\begin{matrix} n_{ix} && -n_{iy} \\ n_{iy} && n_{ix} \end{matrix} \right).
+\end{equation}
+The constants $\alpha$ and $\epsilon$ are chosen in such a way they have small values.
+
+Once covariance matrix $\Omega_{ij}$ has been computed, we can proceed to define an iterative process that permits to update the current value of transformation T. We first operate locally, according to equations
+\begin{equation}
+	\begin{aligned}
+		H_{ij} &= J_{ij}^T\Omega_{ij}J_{ij} \\
+		b_{ij} &= J_{ij}^T\Omega_{ij}e_{ij}.
+	\end{aligned}
+\end{equation}
+Then, we operate globally:
+\begin{equation}
+	\begin{aligned}
+		H &= \sum_{ij} H_{ij} \\
+		b &= \sum_{ij} b_{ij}
+	\end{aligned}
+\end{equation}
+Using global matrices, we can solve system 
+\begin{equation}
+	H\Delta T^\star = b
+\end{equation}
+and obtain a new value $T_{\mbox{new}}$ for the current estimate of transformation, according to
+\begin{equation}
+	\begin{aligned}
+		T_{\mbox{new}} &= \Delta T^\star \cdot T \\
+		T  &\leftarrow  T_{\mbox{new}} 
+	\end{aligned}
+\end{equation}
 \end{document}
