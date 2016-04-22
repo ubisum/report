@@ -596,13 +596,14 @@ If we consider two scans $i$ and $j$ returned by robot's laser, according to pre
 What becomes of great interest at this moment is discovering whether one or more lines in scan $i$ correspond to lines extracted from scan $j$. This is what is known as the \emph{matching problem}. \\
 Finding out the associations between lines belonging to different scans allows to compute a rigid transformation $T$ from scan $j$ to scan $i$; such transformation, is actually able to translate the reference frame of robot in which $j$ was acquired onto reference frame in which $i$ was expressed. The sought transformation should be able to maximize the overlapping between the two reference frames, minimizing, at the same time, the value of an opportune error function.
 
-The problem of determining $T$ can be formulated in terms of a least square estimation, by exploiting the concepts in Section 2.5. Let's suppose that a generic segment $l$ in scan $i$ can be expressed as 
+\subsection{Solving matching problem using least squares estimation}
+The problem of determining $T$ can be formulated in terms of a least square estimation, by exploiting the concepts in Section 2.5. Let's suppose that a generic segment $l_i$ in scan $i$ can be expressed as 
 \begin{equation}
 	l_i = \left(\begin{matrix} p_i \\ n_i \end{matrix} \right)
 \end{equation}
-where $p$ is a point on segment (middlepoint is the most convenient choice) and $n$ is segment's normal, in its classical expression
+where $p_i$ is a point on segment (middlepoint is the most convenient choice) and $n_i$ is segment's normal, in its classical expression
 \begin{equation}
-	n = (\cos\theta_i \quad \sin\theta_i)^T.
+	n_i = (\cos\theta_i \quad \sin\theta_i)^T.
 \end{equation}
 The needed transformation T will always have the form
 \begin{equation}
@@ -622,7 +623,7 @@ A perturbation $\Delta T$ can be introduced to the error function, determining a
 \end{equation}
 Deriving previous expression, we get:
 \begin{equation}
-	\frac{\partial e_{ij}(\Delta T \oplus T)}{\partial \Delta T} = \left(\begin{matrix} \textbf{I}_{2 \times 2} \\ \\ \textbf{0}_{2 \times 2} \end{matrix} \quad \begin{matrix} -p_{iy} \\ p_{ix} \\ -n_{iy} \\ n_{ix}\end{matrix}\right),
+	\frac{\partial e_{ij}(T \oplus \Delta T)}{\partial \Delta T} = \left(\begin{matrix} \textbf{I}_{2 \times 2} \\ \\ \textbf{0}_{2 \times 2} \end{matrix} \quad \begin{matrix} -p_{iy} \\ p_{ix} \\ -n_{iy} \\ n_{ix}\end{matrix}\right) = J_{ij},
 \end{equation}
 where subscripts $ix$ and $iy$ indicate the components $x$ and $y$ in $p_i$ and $n_i$.
 
@@ -638,7 +639,7 @@ and
 \end{equation}
 The constants $\alpha$ and $\epsilon$ are chosen in such a way they have small values.
 
-Once covariance matrix $\Omega_{ij}$ has been computed, we can proceed to define an iterative process that permits to update the current value of transformation T. We first operate locally, according to equations
+Once covariance matrix $\Omega_{ij}$ has been computed, we can proceed to define an iterative process that permits to update the current value of transformation $T$. We first operate locally, according to equations
 \begin{equation}
 	\begin{aligned}
 		H_{ij} &= J_{ij}^T\Omega_{ij}J_{ij} \\
@@ -663,4 +664,18 @@ and obtain a new value $T_{\mbox{new}}$ for the current estimate of transformati
 		T  &\leftarrow  T_{\mbox{new}} 
 	\end{aligned}
 \end{equation}
+
+\subsection{Determining associations between features}
+All what has been explained in previous section, can be inserted in an iteration process that tends to reduce progressively the error in alignment between two frames, while trying to find the transformation $T$ to map one into the other. \\
+Let's suppose to have two scans $i$ and $j$ and that we need to find the transformation $T$ from $j$ to $i$; let's suppose, moreover, to have chosen an initial value for $T$ and a maximun number of iterations $N$. The steps of iteration process can be summarized in the following list:
+\begin{itemize}
+	\item{\emph{Step 1}}: apply current transformation $T$ to lines in scan $j$
+	\item{\emph{Step 2}}: associate each transformed line to a line in scan $i$ that is the closest one, in terms of distance between middlepoints
+	\item{\emph{Step 3}}: compute, for each association, the error $e_{ij}$ and matrices $H_{ij}$ and $b_{ij}$, according to Equations (3.11) - (3.14)
+	\item{\emph{Step 4}}: update global matrices $H$ and $b$, as stated in (3.15)
+	\item{\emph{Step 5}}: compute new transformation $\Delta T$
+	\item{\emph{Step 6}}: if the maximum number of iterations $N$ has been reached, return $\Delta T$. Otherwise, $T \leftarrow \Delta T$ and go back to first step
+\end{itemize}
+
+
 \end{document}
