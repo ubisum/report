@@ -670,7 +670,7 @@ All what has been explained in previous section, can be inserted in an iteration
 Let's suppose to have two scans $i$ and $j$ and that we need to find the transformation $T$ from $j$ to $i$; let's suppose, moreover, to have chosen an initial value for $T$ and a maximun number of iterations $N$. The steps of iteration process can be summarized in the following list:
 \begin{itemize}
 	\item{\emph{Step 1}}: apply current transformation $T$ to lines in scan $j$
-	\item{\emph{Step 2}}: associate each transformed line to a line in scan $i$ that is the closest one, in terms of distance between middlepoints
+	\item{\emph{Step 2}}: associate each transformed line to the closest line in scan $i$, in terms of distance between middlepoints
 	\item{\emph{Step 3}}: compute, for each association, the error $e_{ij}$ and matrices $H_{ij}$ and $b_{ij}$, according to Equations (3.11) - (3.14)
 	\item{\emph{Step 4}}: update global matrices $H$ and $b$, as stated in (3.15)
 	\item{\emph{Step 5}}: compute new transformation $\Delta T$
