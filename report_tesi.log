@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.6.25)  28 APR 2016 15:34
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.6.25)  28 APR 2016 16:46
 entering extended mode
  %&-line parsing enabled.
 **report_tesi.tex
@@ -847,34 +847,35 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 156.
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 183.
- [3] [4pdfTeX warning (ext4): destination with the same identifier (name{equati
-on.1.3.23}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.242 \end{equation}
-                    ] [5pdfTeX warning (ext4): destination with the same identi
-fier (name{equation.1.3.26}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.283 \chapter
-              {Basic concepts}]
+ [3] [4]
 Chapter 2.
-[6
+[5
 
-] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 383--386
+] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 310--313
 
  []
 
-[8] [9] [10] [11pdfTeX warning (ext4): destination with the same identifier (na
-me{equation.2.5.12}) has been already used, duplicate ignored
+[7] [8] [9pdfTeX warning (ext4): destination with the same identifier (name{equ
+ation.2.4.15}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.553 \end{equation}
-                    ] [12]
+l.431 \end{equation}
+                    ] [10pdfTeX warning (ext4): destination with the same ident
+ifier (name{equation.2.4.18}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.475 \begin{itemize}
+                     ] [11pdfTeX warning (ext4): destination with the same iden
+tifier (name{equation.2.5.23}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.524 	\item{
+             compute a set of increments to be applied to current estimate i...
+] [12]
 Chapter 3.
 [13
 
@@ -886,8 +887,8 @@ LaTeX Font Warning: Size substitutions with differences
  ) 
 Here is how much of TeX's memory you used:
  8733 strings out of 493848
- 125124 string characters out of 1152823
- 223681 words of memory out of 3000000
+ 125134 string characters out of 1152823
+ 224681 words of memory out of 3000000
  11686 multiletter control sequences out of 15000+50000
  85028 words of font info for 125 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
@@ -903,7 +904,7 @@ nts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr1
 type1/urw/symbol/usyr.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8
 a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/te
 xmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report_tesi.pdf (15 pages, 195869 bytes).
+Output written on report_tesi.pdf (15 pages, 196065 bytes).
 PDF statistics:
  305 PDF objects out of 1000 (max. 8388607)
  108 named destinations out of 1000 (max. 500000)
