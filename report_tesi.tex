@@ -571,7 +571,7 @@ As discussed in last chapters, once a robot has acquired information from a sens
 
 If we denote with $f$ an extractor function, the extracted features can be represented as $f(z_t)$; let's indicate with $r$, $\phi$ and $s$ the range, the bearing and the signature. We can obtain, then, a feature vector as a collection of triplets:
 \begin{equation}
-	f(z_t) = \{f_t^1, f_t^2, \dots \} =\left \{ \left( \begin{matrix} r_t^1 \\ \phi_1^t \\ s_t^1 \end{matrix} \right),  \left(\begin{matrix} r_t^2 \\ \phi_2^t \\ s_t^2 \end{matrix} \right), \dots \right\}
+	f(z_t) = \{f_t^1, f_t^2, \dots \} =\left \{ \left( \begin{matrix} r_t^1 \\ \phi_t^1 \\ s_t^1 \end{matrix} \right),  \left(\begin{matrix} r_t^2 \\ \phi_t^2 \\ s_t^2 \end{matrix} \right), \dots \right\}
 \end{equation}
 It is commonly accepted that features are indipendent from each other; such indipendence can be formalized as
 \begin{equation}
@@ -670,7 +670,7 @@ All what has been explained in previous section, can be inserted in an iteration
 Let's suppose to have two scans $i$ and $j$ and that we need to find the transformation $T$ from $j$ to $i$; let's suppose, moreover, to have chosen an initial value for $T$ and a maximun number of iterations $N$. The steps of iteration process can be summarized in the following list:
 \begin{itemize}
 	\item{\emph{Step 1}}: apply current transformation $T$ to lines in scan $j$
-	\item{\emph{Step 2}}: associate each transformed line to the closest line in scan $i$, in terms of distance between middlepoints
+	\item{\emph{Step 2}: associate each transformed line to the closest line in scan $i$; such line is sought first by evaluating the normals of lines in $i$ and constituting an initial pool of possible associations.hen, the lines in the pool are evaluated on the basis of their $\theta$, to decide the final association}
 	\item{\emph{Step 3}}: compute, for each association, the error $e_{ij}$ and matrices $H_{ij}$ and $b_{ij}$, according to Equations (3.11) - (3.14)
 	\item{\emph{Step 4}}: update global matrices $H$ and $b$, as stated in (3.15)
 	\item{\emph{Step 5}}: compute new transformation $\Delta T$
