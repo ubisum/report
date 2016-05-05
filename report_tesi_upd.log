@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  5 MAY 2016 18:55
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  5 MAY 2016 19:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**report_tesi.tex
-(./report_tesi.tex
+**report_tesi_upd.tex
+(./report_tesi_upd.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
 rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
@@ -731,8 +731,9 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 Document Style - pseudocode environments for use with the `algorithmicx' style
 )
 LaTeX Font Info:    Redeclaring math alphabet \mathcal on input line 37.
- (./report_tesi.aux)
-\openout1 = `report_tesi.aux'.
+
+No file report_tesi_upd.aux.
+\openout1 = `report_tesi_upd.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 46.
 LaTeX Font Info:    ... okay on input line 46.
@@ -749,7 +750,6 @@ LaTeX Font Info:    ... okay on input line 46.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 46.
 LaTeX Font Info:    ... okay on input line 46.
 LaTeX Font Info:    Try loading font information for T1+ptm on input line 46.
-
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -835,10 +835,8 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 46.
 LaTeX Info: Redefining \pageref on input line 46.
 LaTeX Info: Redefining \nameref on input line 46.
-
-(./report_tesi.out) (./report_tesi.out)
 \@outlinefile=\write3
-\openout3 = `report_tesi.out'.
+\openout3 = `report_tesi_upd.out'.
 
 
 Chapter 1.
@@ -895,13 +893,13 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 
 
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<images/ht.jpeg, id=116, 512.91624pt x 384.43625pt>
+<images/ht.jpeg, id=24, 512.91624pt x 384.43625pt>
 File: images/ht.jpeg Graphic file (type jpg)
  <use images/ht.jpeg>
 Package pdftex.def Info: images/ht.jpeg used on input line 113.
 (pdftex.def)             Requested size: 174.12701pt x 130.50714pt.
 
-<images/dht.jpeg, id=117, 540.0175pt x 417.56pt>
+<images/dht.jpeg, id=25, 540.0175pt x 417.56pt>
 File: images/dht.jpeg Graphic file (type jpg)
  <use images/dht.jpeg>
 Package pdftex.def Info: images/dht.jpeg used on input line 119.
@@ -912,7 +910,7 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 198.
 
-<images/robocup_robot_positions.jpeg, id=135, 703.62875pt x 407.5225pt>
+<images/robocup_robot_positions.jpeg, id=43, 703.62875pt x 407.5225pt>
 File: images/robocup_robot_positions.jpeg Graphic file (type jpg)
 
 <use images/robocup_robot_positions.jpeg>
@@ -920,7 +918,7 @@ Package pdftex.def Info: images/robocup_robot_positions.jpeg used on input line
  217.
 (pdftex.def)             Requested size: 435.32422pt x 252.12656pt.
  [3] [4 <./images/robocup_robot_positions.jpeg>] <images/robocup_alg_module.jpe
-g, id=152, 714.67pt x 317.185pt>
+g, id=61, 714.67pt x 317.185pt>
 File: images/robocup_alg_module.jpeg Graphic file (type jpg)
 
 <use images/robocup_alg_module.jpeg>
@@ -963,26 +961,35 @@ Chapter 3.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 709.
  [16]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 709.
- (./report_tesi.aux)
+ (./report_tesi_upd.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 709.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 709.
-Package rerunfilecheck Info: File `report_tesi.out' has not changed.
-(rerunfilecheck)             Checksum: 142707B452057A9C5CF197D113CB43A3;1771.
 
+
+Package rerunfilecheck Warning: File `report_tesi_upd.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `report_tesi_upd.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  142707B452057A9C5CF197D113CB43A3;1771.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.55997pt have occurred.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 709.
  ) 
 Here is how much of TeX's memory you used:
- 9748 strings out of 493633
- 143299 string characters out of 3143378
- 258802 words of memory out of 3000000
- 12721 multiletter control sequences out of 15000+200000
+ 9717 strings out of 493633
+ 142873 string characters out of 3143378
+ 258645 words of memory out of 3000000
+ 12696 multiletter control sequences out of 15000+200000
  87750 words of font info for 127 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 36i,17n,38p,1024b,409s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,17n,38p,1028b,409s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/loc
@@ -996,10 +1003,10 @@ l/texlive/2011/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2
 ist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/
 type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on report_tesi.pdf (16 pages, 272164 bytes).
+Output written on report_tesi_upd.pdf (16 pages, 270781 bytes).
 PDF statistics:
- 322 PDF objects out of 1000 (max. 8388607)
- 285 compressed objects within 3 object streams
+ 249 PDF objects out of 1000 (max. 8388607)
+ 212 compressed objects within 3 object streams
  112 named destinations out of 1000 (max. 500000)
- 213 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
