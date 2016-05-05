@@ -75,7 +75,7 @@ A possible choice for $\mathcal{P}$ is the the set of representations of lines i
 \begin{equation}
 	x\cos\theta + y\sin\theta = \rho
 \end{equation}
-in which $\theta$ expresses the direction of line's normal vectors and $\rho$ its distance from origin, we can select a family of sets to apply HT:
+in which $\theta$ expresses the direction of line's normal vectors and $\rho$ its distance from origin (see Figure 1.1), we can select a family of sets to apply HT:
 \begin{equation}
 	\mathcal{F}_{(\theta, \rho)} =\{(x,y) | x\cos\theta + \sin\theta = \rho\}
 \end{equation}
@@ -102,10 +102,25 @@ Then, within parameter space $\mathcal{P}$:
 \begin{equation}
 	\mbox{HT}'(\rho, \theta) = \mbox{HT}(\theta+\phi, \rho+(\cos\theta \quad \sin\theta)T)
 \end{equation}
-Computing the HT passes through a discrete approximation of it, called \emph{Discrete Hough Transform (DHT)}, that allows to redefine our family of sets as:
+Computing the HT passes through a discrete approximation of it, called \emph{Discrete Hough Transform (DHT)}; the comparison with simple HT is shown in Figure 1.2. DHT allows to redefine our family of sets as:
 \begin{equation}
 	\mathcal{D}_{(\theta, \rho)} = \{(x,y) | \ \rho\le x\cos\theta + y\sin\theta < \rho + \Delta\rho\} 
 \end{equation}
+\begin{figure}[htbp]
+\centering
+\begin{minipage}[c]{.40\textwidth}
+\centering\setlength{\captionmargin}{0pt}%
+\includegraphics[width=.90\textwidth]{images/ht.jpeg}
+\caption{Hough transform}
+\end{minipage}%
+\hspace{10mm}%
+\begin{minipage}[c]{.40\textwidth}
+\centering\setlength{\captionmargin}{0pt}%
+\includegraphics[width=.90\textwidth]{images/dht.jpeg}
+\caption{Discrete Hough transform}
+\end{minipage}
+%\caption{Didascalia comune alledue figure\label{fig:minipage2}}
+\end{figure}
 For a complete definition of the scan matching algorithm based on HT, we need to define the so called \emph{Hough spectrum}. For such purpose, we need a funcional $g$ that is invariant to traslation. Theoretically speaking, this means that, given a function $f$:
 \begin{equation}
 	f'(\tau) = f(\tau + \alpha) \Rightarrow g[f] = g[f']
@@ -195,8 +210,13 @@ The procedure, known as \emph{LineMatch}, is described by Algorithm 1.
 		\item{$\bf{return}$ H}	
 	\end{algorithmic}
 \end{algorithm}
-The main tasks performed by algorithm are extracting lines from current scan and comparing them with the ones contained in a \emph{a priori} map. In particular, function \emph{SelectScanline} picks a a new line to be matched, while \emph{VerifyMatch} checks that a new pair \emph{(m, s)} of matched lines is compatible with the pairs alreary accepted in previous iterations of procedure. Finally, the algorithm returns a set of accepted pairs, that can be translated into positions from which robot may have taken scans. Proper constraints on lines' lengths and roto-traslations can allow algorithm to be more effective; this implies that it is not necessary to have a good estimate of robot's initial pose, since robot is able to recover from initial error.  
-
+The main tasks performed by algorithm are extracting lines from current scan and comparing them with the ones contained in a \emph{a priori} map. In particular, function \emph{SelectScanline} picks a a new line to be matched, while \emph{VerifyMatch} checks that a new pair \emph{(m, s)} of matched lines is compatible with the pairs alreary accepted in previous iterations of procedure. Finally, the algorithm returns a set of accepted pairs, that can be translated into positions from which robot may have taken scans (Figure 1.3). Proper constraints on lines' lengths and roto-traslations can allow algorithm to be more effective; this implies that it is not necessary to have a good estimate of robot's initial pose, since robot is able to recover from initial error.  
+\begin{figure}[htbp]
+\centering
+\centering\setlength{\captionmargin}{0pt}%
+\includegraphics[width=.90\textwidth]{images/robocup_robot_positions.jpeg}
+\caption{Example of two possible position hypotheses returned by LINEMATCH}
+\end{figure}
 Once the matching activities are completed, the most plausible position is selected using odometry (a closest neighborhood policy will fit for the purpose) and is used to update robot's pose, by Kalman filters. A good choice for initial mean and covariance values may be 
 \begin{equation}
 	\begin{aligned}
@@ -204,6 +224,14 @@ Once the matching activities are completed, the most plausible position is selec
 		\Sigma_l &:= \left(\begin{matrix} \infty & 0 & 0 \\ 0 & \infty & 0 \\ 0 & 0 & \infty\end{matrix}\right)
 	\end{aligned}
 \end{equation}
+
+A summary of full algorithm is shown in Figure 1.4. The modular formulation supposes the presence of an \emph{a priori} knowledge of the field in which robot is requested to operate.
+\begin{figure}[htbp]
+\centering
+\centering\setlength{\captionmargin}{0pt}%
+\includegraphics[width=.90\textwidth]{images/robocup_alg_module.jpeg}
+\caption{Modular representation of full algorithm}
+\end{figure}
 
 \section{Selecting features to track}
 A scan matching algorithm, whatever its inner functionalities, can work properly only if the choice of features to extract has been made correctly, in order to maximize matching result. \\
