@@ -23,6 +23,7 @@
 \usepackage{listing}
 \usepackage{enumerate}
 \usepackage{algorithm}
+\usepackage{caption}
 %\usepackage{algorithmic}
 \usepackage[noend]{algpseudocode}
 
@@ -308,20 +309,20 @@ In a few words, a window is accepted if, given the two eigenvalues $\lambda_1$ a
 \end{equation}
 with $\lambda$ a chosen threshold.\\
 An example of how textures may be extracted and accepted according to condition (1.30) is depicted in Figure 1.5.
-\begin{figure}[htbp]
+\begin{figure}[htb]
 \centering
 \begin{minipage}[c]{.40\textwidth}
 \centering\setlength{\captionmargin}{0pt}%
-\includegraphics[width=.90\textwidth]{images/features_original_image.jpeg}
-\caption{(a)}
-\end{minipage}%
-\hspace{10mm}%
+\centerline{\includegraphics[width=1.5\textwidth]{images/features_original_image.jpeg}}
+(a)
+\end{minipage} \\
+\vspace{10mm}%
 \begin{minipage}[c]{.40\textwidth}
 \centering\setlength{\captionmargin}{0pt}%
-\includegraphics[width=.90\textwidth]{images/features_extracted_features.jpeg}
-\caption{(b)}
+\centerline{\includegraphics[width=1.5\textwidth]{images/features_extracted_features.jpeg}}
+(b)
 \end{minipage}
-\caption{Original image (a) and extracted features (b), according to 1.30}
+\caption{Original image (a) and extracted features (b), using an acceptance criterion for windows, as explained in 1.30}
 \end{figure}
  
 %--------------------------------------------------------------------------
@@ -381,7 +382,7 @@ Odometry is probably the most used method to estimate the position of a robot at
 Despite limitations due to errors, odometry gained a great success in mobile robots field, for at the least four reasons:
 \begin{itemize}
 \item{other kinds of measurements can be itegrated to obtain a better accuracy}
-\item{in cases in whick landmarks are used for helping to estimate robot's position, their number can be smaller, thanks to odometry's presence}
+\item{in cases in which landmarks are used for helping to estimate robot's position, their number can be smaller, thanks to odometry's presence}
 \item{odometry allows to assume that robot is stuck in a certain pose for enough time to perceive all the landmarks in a given area and compute possible matchings with landmarks detected previously}
 \item{in some circumstances, because of the absence of external references (e.g. landmarks) or the impossibility to place any of them in a hostile environment, odometry can be the only way to estimate robot's position}
 \end{itemize}
@@ -451,10 +452,16 @@ Estimating correctly the extent of odometric errors avoids further problems such
 	\item{the error due to different wheels' diameters $E_d = \frac{D_R}{D_L}$, with $D_R$ and $D_L$, respectively, the actual diameters of right and left wheel}
 	\item{the error due to uncertainty about real wheelbase $E_b = \frac{b_{actual}}{b_{nominal}}$, with $b$ the wheelbase of robot}
 \end{itemize}
+\begin{figure}[htbp]
+\centering
+\centering\setlength{\captionmargin}{0pt}%
+\includegraphics[width=.90\textwidth]{images/ellipses.jpeg}
+\caption{Ellipses, depicting robot's position error, grow as odometry uncertainty increases}
+\end{figure}
 
 \subsection{Measuring Systematic errors}
 Before describing Borenstein and Feng's method to estimate systematic errors, it is useful to analyse Borenstein and Koren's method (1987). \\
-Let's suppose that robot starts its path from an initial position <$x_0, y_0, \theta_0$> and has to move on a 4x4 meter square path. The robot is programmed to return to its initial position at the end of the path, but because of systematic errors, this will not happen accurately and a series of errors will be accumulated (\emph{return position errors}):
+Let's suppose that robot starts its path from an initial position <$x_0, y_0, \theta_0$> and has to move on a 4x4 meter square path (Figure 2.2). The robot is programmed to return to its initial position at the end of the path, but because of systematic errors, this will not happen accurately and a series of errors will be accumulated (\emph{return position errors}):
 \begin{equation}
 	\begin{aligned}
 		\epsilon_{x} &= x_{abs}-x_{calc} \\
@@ -467,7 +474,7 @@ We have denoted with the $abs$ subscript the absolute position and orientation o
 
 This kind of experiment is not suitable for testing odometry for differential drive platforms. That is why Borenstein and Feng introduced their \emph{bidirectional square-path} experiment. This time, the robot is required to walk the path both in clockwise and counterclockwise direction. The errors $E_d$ and $E_b$ could compensate each other when robot travelled on one direction only; now, travelling on both direction, the two errors sum up.
 
-If we let the robot travel on both directions $n$ times (usually, $n=5$), at the end of each run robot will accumulate a pose error as explained in (). We can compute the center of gravity of these errors according to the following relations:
+If we let the robot travel on both directions $n$ times (usually, $n=5$), at the end of each run robot will accumulate a pose error as explained in (2.7). We can compute the center of gravity of these errors according to the following relations:
 \begin{equation}
 	\begin{aligned}
 		x_{cg}^{cw} &= \frac{1}{n}\sum^n_{i=1}\epsilon_{x,i}^{cw} \\
@@ -488,6 +495,12 @@ Finally, a measure of systematic odometric error can be obtained as
 	E_{sys} = \max(r_{cg}^{cw},r_{cg}^{ccw}).
 \end{equation}
 The orientation error $\epsilon_\theta$ is not considered in $E_{sys}$, since each orientation error translates into a position error.
+\begin{figure}[htbp]
+\centering
+\centering\setlength{\captionmargin}{0pt}%
+\includegraphics[width=.50\textwidth]{images/unidirectional_nominal_path.jpeg}
+\caption{The 4x4 meter square path for Borenstein and Koren's method}
+\end{figure}
 
 \subsection{Measuring non-Systematic errors}
 The square path test that was used to estimate systematic error, can be implemented again for non-systematic case, adding to the path some artificial bumps. Since return errors are sensible to the positions of bumps, this time error $\epsilon_\theta$ will be used. We can, then, compute an \emph{average absolute orientation error}:
@@ -522,20 +535,33 @@ When receiving data from a ranger sensor (for instance, a laser range), one need
 For the purpose of this thesis, we will consider the second option.
 
 Across the years, many algorithms have been developed for extracting lines, starting from a laser's sequence of points, each with its pros and cons. The choice of an algorithm instead of another one depends mainly on one's needs. Sometimes speed needs to be preferred, in some other cases it is preferrable to give importance to quality, since bad extraction of features may lead to system's divergence. Complexity, too, is a particular not to be forgotten. \\ 
-Here, we will describe the so-called \emph{split and merge algorithm}, which operates using a divide et impera logic, starting with an initial set of points, progressively divided into subsets (on the basis of a check condition), until satisfying the conditions for determining the existence of a line (the subset under inspection has not enough points to be divided into two subsets and/or no point satisfies check condition to proceed to another division).
-The main steps of procedure are described by Algorithm 1.
+Here, we will describe the so-called \emph{split and merge algorithm}, which operates using a \emph{divide et impera} logic, starting with an initial set of points, progressively divided into subsets (on the basis of a check condition), until satisfying the conditions for determining the existence of a line (the subset under inspection has not enough points to be divided into two subsets and/or no point satisfies check condition to proceed to another division).
+The main steps of procedure are described by Algorithm 1. In particular:
+\begin{itemize}
+\item{\emph{isThereASetToSplit}($\mathcal{L})$ checks whether there is still a subset of points, among the ones in $\mathcal{L}$, that may be splitted into two subsets}
+\item{\emph{takeASetToSplit($\mathcal{L}$)} extracts a set $s_i$ among the candidates to be splitted in $\mathcal{L}$}
+\item{\emph{fitALine}($s_i$) returns a segment $l_i$ that best fits the points in $s_i$ (a simple choice may be computing the segment connecting the first and last point in $s_i$)}
+\item{\emph{findFarthestPoint}($l_i$, $s_i$) returns the furthest point $P$ from $l_i$, among the ones in $s_i$}
+\item{\emph{split}($s_i$, $P$) splits the set of points $s_i$ into two subsets: the first set contains the point preceeding $P$, the second one contains all remaining points}
+\item{\emph{mergeCollinearLines}($\mathcal{L}$) merges segments that are collinear (i. e. segments that are very close to each other and lie on the same line)}
+\end{itemize}
 \begin{algorithm}
 \caption{Split and merge algorithm}\label{euclid}
 \begin{algorithmic}[1]
-\item{Initial: put all points in a set $s_1$ and insert $s_1$ into an initially empty list $\mathcal{L}$}
-\item{Get a set $s_i$ from $\mathcal{L}$ and fit a line through its points}
-\item{Find point $P$ having the greatest distance $d_P$ from line}
-\item{If $d_P$ is less than a threshold, go back to step 2}
-\item{Otherwise, split $s_i$ in $P$ into two subsets $s_{i1}$ and $s_{i2}$. Replace $s_i$ with $s_{i1}$ and $s_{i2}$ in $\mathcal{L}$. Go back to step 2}
-\item{If all sets in $\mathcal{L}$ have been checked, merge collinear lines}
+\item{\textbf{Input}: a set of all points $s_1$, an initially empty list $\mathcal{L}$ and a distance threshold $d_p$}
+\item{\textbf{Output}: extracted segments (represented by their two extremes)}
+\item{$\mathcal{L} \cup s_1$}
+\item{\textbf{while}(\emph{isThereASetToSplit}($\mathcal{L})$)}
+\item{\qquad $s_i$ = \emph{takeASetToSplit($\mathcal{L}$)}}
+\item{\qquad $l_i$ = \emph{fitALine}($s_i$)}
+\item{\qquad $P$ = \emph{findFarthestPoint}($l_i$, $s_i$)}
+\item{\qquad \textbf{if}(\emph{distance(P, $l_i$)} > $d_p$)}
+\item{\qquad \qquad ($s_j$, $s_k$) = \emph{split}($s_i$, $P$)}
+\item{\qquad \qquad $\mathcal{L} \leftarrow \mathcal{L} - \{s_i\}$}
+\item{\qquad \qquad $\mathcal{L} \cup \{s_k, s_j\}$}
+\item{\emph{mergeCollinearLines}($\mathcal{L}$)}
 \end{algorithmic}
 \end{algorithm}
-The second step of algorithm can be performed using any fitting process, even by connecting the first and last point in the sequence $s_i$. Each computed line is represented by its two extremes.
 
 \section{Least squares estimation}
 Let \textbf{x} be a vector variable indicating the state of the system and let's suppose to have a series of  functions 
